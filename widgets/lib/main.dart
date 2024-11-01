@@ -12,46 +12,80 @@ class App extends StatefulWidget {
 }
 
 class _AppState extends State<App> {
-  int counter = 0;
+  bool showTitle = true;
 
-  void onClicked() {
+  void toggleTitle() {
     setState(() {
-      // 데이터가 수정 되었음을 알림
-      counter = counter + 1;
+      showTitle = !showTitle;
     });
   }
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      theme: ThemeData(
+        textTheme: const TextTheme(
+          titleLarge: TextStyle(
+            color: Colors.red,
+          ),
+        ),
+      ),
       home: Scaffold(
         backgroundColor: const Color(0xFFF4EDDB),
         body: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              const Text(
-                'click Count',
-                style: TextStyle(
-                  fontSize: 30,
-                ),
-              ),
-              Text(
-                '$counter',
-                style: const TextStyle(
-                  fontSize: 30,
-                ),
-              ),
+              showTitle ? const MyLargeTitle() : const Text("nothing"),
               IconButton(
-                onPressed: onClicked,
-                iconSize: 40,
-                icon: const Icon(
-                  Icons.add_box_rounded,
-                ),
-              )
+                onPressed: toggleTitle,
+                icon: const Icon(Icons.remove_red_eye),
+              ),
             ],
           ),
         ),
+      ),
+    );
+  }
+}
+
+// state late
+class MyLargeTitle extends StatefulWidget {
+  const MyLargeTitle({
+    super.key,
+  });
+
+  @override
+  State<MyLargeTitle> createState() => _MyLargeTitleState();
+}
+
+class _MyLargeTitleState extends State<MyLargeTitle> {
+  int count = 0;
+
+  // 이벤트 메소드(초기화시에만 호출)
+  @override
+  void initState() {
+    super.initState();
+    //print("initState!");
+  }
+
+  // 스크린 제거될 때 호출
+  @override
+  void dispose() {
+    super.dispose();
+    // print("dispose!");
+  }
+
+  // context 는 모든 상위 요소들에 대한 정보를 가짐
+  @override
+  Widget build(BuildContext context) {
+    // print("build");
+    // 위젯 트리
+    return Text(
+      'My Large Title',
+      style: TextStyle(
+        fontSize: 30,
+        color: Theme.of(context).textTheme.titleLarge?.color,
       ),
     );
   }
